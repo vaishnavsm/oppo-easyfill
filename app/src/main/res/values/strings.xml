@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">OPPO SmartFill</string>
+    <string name="title_home">Home</string>
+    <string name="title_logs">Logs</string>
+    <string name="title_personal">Secure</string>
+    <string name="home_hint_formid">Form ID</string>
+    <string name="home_text_submit">Find</string>
+    <string name="oppo_img_desc">OPPO</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">Deny All</string>
+    <string name="dialog_grant_permission">Grant Permissions</string>
+    <string name="dialog_permission_head">Form Requests Permission To Personal Data</string>
+    <string name="dialog_enter_text">Edit Field</string>
+    <string name="no">Cancel</string>
+    <string name="yes">Change</string>
+</resources>
