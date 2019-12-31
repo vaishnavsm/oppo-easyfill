@@ -23,9 +23,12 @@ class DataServer {
             for(key in o.keys()){
                 val l = o.getJSONArray(key)
                 val list = mutableListOf<String>()
-                
+                for(i in 0 until l.length()){
+                    list.add(l.getString(i))
+                }
+                form[key] = list.toList()
             }
-//            callback.OnGetFormCallback(response)
+            callback.OnGetFormCallback(form)
         }, Response.ErrorListener { error ->
             Log.d("DATA ERROR", error.message?:"")
         })

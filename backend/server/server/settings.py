@@ -25,7 +25,7 @@ SECRET_KEY = '32ysv+so&cm2hi82c30k24x70p%c%zqz!ev7%)#cp0z%_*(dp3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["ec2-54-218-8-95.us-west-2.compute.amazonaws.com","54.218.8.95","localhost","127.0.0.1"]
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
