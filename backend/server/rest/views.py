@@ -3,18 +3,36 @@ from django.contrib.auth.models import User
 from . import models
 import json
 from django.contrib.auth import authenticate, login
-from rest_framework.authtoken.models import Token
+# from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
+from .utils import AmountRecommendationEngine
 # Create your views here.
 
 from django.views.decorators.csrf import csrf_exempt
 
+registered_engines = {}
+registered_engines["amount"] = AmountRecommendationEngine("amount")
+
 @csrf_exempt
-def create_user(request):
-    data = json.loads(request.body)
-    user = User.objects.create_user(data['username'], data['email'], data['password'])
-    models.UserClass.objects.create(user=user)
-    return JsonResponse({}, status = 201)
+@api_view(['GET'])
+def get_form(request):
+    formId = request.GET['form-id']
+    form = None
+    # form = models.Application.objects.get(name = formId)
+    try: 
+        form = models.Application.objects.get(name = formId)
+    except e as Exception:
+        return JsonResponse({}, status = 404)
+    
+    returnObject = {}
+    global registered_engines
+    for item in form.fields.all():
+        suggestedValue = None
+        if item.engine in registered_engines.keys():
+            suggestedValue = registered_engines[item.engine].suggest(json.loads(form.params))
+        returnObject[item.data_name] = ("personal" if item.is_personal else "specific", item.is_required, suggestedValue)
+    print(returnObject)
+    return JsonResponse(json.dumps(returnObject), status = 200, safe=False)
 
 @csrf_exempt
 def login_user(request):

@@ -11,6 +11,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.vaishnavsm.opposmartfill.backend.BackendController
 import com.vaishnavsm.opposmartfill.backend.PersonalDataServer
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
 
 class MainActivity : AppCompatActivity(), PermissionDialog.PermissionDialogListener {
     override fun onDialogGrantClick(list: List<String>) {
@@ -21,6 +27,13 @@ class MainActivity : AppCompatActivity(), PermissionDialog.PermissionDialogListe
         super.onCreate(savedInstanceState)
 
         BackendController.mPersonalDataServer = PersonalDataServer(applicationContext)
+
+        val data = intent.data
+        val strData = data!!.toString()
+        val formId = strData.replace("com.vaishnavsm.opposmartfill://","")
+
+        if(formId.length > 2) BackendController.mBackgroundData["form-id"] = formId
+        else if(BackendController.mBackgroundData.contains("form-id")) BackendController.mBackgroundData.remove("form-id")
 
         setContentView(R.layout.activity_main)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -33,6 +46,7 @@ class MainActivity : AppCompatActivity(), PermissionDialog.PermissionDialogListe
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }

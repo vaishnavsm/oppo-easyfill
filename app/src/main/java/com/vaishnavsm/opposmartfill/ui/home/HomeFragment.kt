@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,27 +20,26 @@ import com.vaishnavsm.opposmartfill.backend.BackendController
 class HomeFragment : Fragment(), PermissionDialog.PermissionDialogListener {
 
     private lateinit var homeViewModel: HomeViewModel
-
+    private lateinit var formIdText: EditText
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        homeViewModel =
-//            ViewModelProviders.of(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-//        val textView: TextView = root.findViewById(R.id.text_home)
-//        homeViewModel.text.observe(this, Observer {
-//            textView.text = it
-//        })
         val submitButton = root.findViewById<Button>(R.id.button)
         submitButton.setOnClickListener { onFindButtonClick(it) }
+        formIdText = root.findViewById(R.id.editText)
+        if(BackendController.mBackgroundData.contains("form-id")){
+            formIdText.text.insert(0, BackendController.mBackgroundData["form-id"])
+        }
         return root
     }
 
     var form : Map<String, List<String>>? = null
     fun onFindButtonClick(v : View){
-        form = BackendController.mDataServer.getForm("abc")
+
+        form = BackendController.mDataServer.getForm(formIdText.text.toString())
         val neededPermissions = form!!.entries.filter{ it.value[0] == "personal"  }.map{ it.key }
         if(neededPermissions.isNotEmpty()){
             val permissions_dialog = PermissionDialog(neededPermissions)

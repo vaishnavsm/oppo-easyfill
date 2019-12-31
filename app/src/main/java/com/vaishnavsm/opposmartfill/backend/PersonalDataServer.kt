@@ -1,18 +1,24 @@
 package com.vaishnavsm.opposmartfill.backend
 
 import android.content.Context
+import android.content.SharedPreferences
 import java.lang.Exception
 
 class PersonalDataServer(context : Context) {
 
     private val dataMap = mutableMapOf<String, String>()
+    private lateinit var input : SharedPreferences
+    private lateinit var editor : SharedPreferences.Editor
     init {
         try{
-            val inputStream = context.getSharedPreferences("DATA", 0)
+            input = context.getSharedPreferences("DATA", 0)
         } catch (e : Exception) {
 
         }
-        dataMap["name"] = "Dummy Name"
+        val savedKeys = input.getStringSet("_keyset_", setOf()) ?: setOf<String>()
+        for(key in savedKeys){
+            dataMap[key] = input.getString(key, "") ?: ""
+        }
     }
 
     fun getData(key : String) : String?{
@@ -22,5 +28,14 @@ class PersonalDataServer(context : Context) {
 
     fun addData(key : String, value : String){
         dataMap[key] = value
+    }
+
+    fun saveState(){
+        editor = input.edit()
+        editor.putStringSet("_keyset_", dataMap.keys.toSet())
+        for(key in dataMap.keys.toSet()){
+            editor.putString(key, dataMap[key])
+        }
+        editor.apply()
     }
 }

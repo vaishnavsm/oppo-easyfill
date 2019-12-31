@@ -60,6 +60,8 @@ class FormActivity : AppCompatActivity(), EditDialog.EditDialogListener {
             for(item in dataSet){
                 if(item[2] == "personal" && permissions.contains(item[0])) BackendController.mPersonalDataServer.addData(item[0], item[1])
             }
-            finish() }
+            BackendController.mPersonalDataServer.saveState()
+            finish()
+        }
     }
 }

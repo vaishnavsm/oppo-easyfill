@@ -2,7 +2,10 @@ package com.vaishnavsm.opposmartfill.backend
 
 class DataServer {
     fun getForm(formId : String) : Map<String, List<String>>{
+        // (personal or specific, required, suggested value (ML generated)
+
         return mapOf(
+
                 "name" to listOf("personal", "no"),
                 "age" to listOf("personal", "no"),
                 "phone" to listOf("personal", "no"),

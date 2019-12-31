@@ -1,6 +1,7 @@
 from django.contrib import admin
 from . import models
 # Register your models here.
-admin.site.register(models.UserClass)
-admin.site.register(models.LogEntry)
-admin.site.register(models.Template)
+admin.site.register(models.Application)
+admin.site.register(models.ApplicationField)
+admin.site.register(models.RequestApplication)
+admin.site.register(models.Submission)
