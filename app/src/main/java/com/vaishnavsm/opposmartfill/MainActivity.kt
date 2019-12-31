@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), PermissionDialog.PermissionDialogListe
         BackendController.mPersonalDataServer = PersonalDataServer(applicationContext)
 
         val data = intent.data
-        val strData = data!!.toString()
+        val strData = data?.toString() ?: ""
         val formId = strData.replace("com.vaishnavsm.opposmartfill://","")
 
         if(formId.length > 2) BackendController.mBackgroundData["form-id"] = formId

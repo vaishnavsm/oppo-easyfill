@@ -30,10 +30,10 @@ def get_form(request):
         suggestedValue = None
         if item.engine in registered_engines.keys():
             suggestedValue = registered_engines[item.engine].suggest(json.loads(form.params))
-        returnObject[item.data_name] = ("personal" if item.is_personal else "specific", item.is_required, suggestedValue)
+        returnObject[item.data_name] = ("personal" if item.is_personal else "specific", "yes" if item.is_required else "no", str(suggestedValue))
     print(returnObject)
     return JsonResponse(json.dumps(returnObject), status = 200, safe=False)
-
+1
 @csrf_exempt
 def login_user(request):
     data = json.loads(request.body) 

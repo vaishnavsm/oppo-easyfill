@@ -16,8 +16,9 @@ import com.vaishnavsm.opposmartfill.FormActivity
 import com.vaishnavsm.opposmartfill.PermissionDialog
 import com.vaishnavsm.opposmartfill.R
 import com.vaishnavsm.opposmartfill.backend.BackendController
+import com.vaishnavsm.opposmartfill.backend.DataServer
 
-class HomeFragment : Fragment(), PermissionDialog.PermissionDialogListener {
+class HomeFragment : Fragment(), PermissionDialog.PermissionDialogListener, DataServer.DataServerInterface {
 
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var formIdText: EditText
@@ -39,7 +40,12 @@ class HomeFragment : Fragment(), PermissionDialog.PermissionDialogListener {
     var form : Map<String, List<String>>? = null
     fun onFindButtonClick(v : View){
 
-        form = BackendController.mDataServer.getForm(formIdText.text.toString())
+        BackendController.mDataServer.getForm(formIdText.text.toString(), context!!, this)
+
+    }
+
+    override fun OnGetFormCallback(lform: Map<String, List<String>>){
+        form = lform
         val neededPermissions = form!!.entries.filter{ it.value[0] == "personal"  }.map{ it.key }
         if(neededPermissions.isNotEmpty()){
             val permissions_dialog = PermissionDialog(neededPermissions)
