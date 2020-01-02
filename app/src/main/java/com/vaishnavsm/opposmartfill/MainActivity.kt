@@ -15,7 +15,7 @@ import androidx.core.app.ComponentActivity
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
+import com.vaishnavsm.opposmartfill.backend.BlockchainEntryServer
 
 
 class MainActivity : AppCompatActivity(), PermissionDialog.PermissionDialogListener {
@@ -27,10 +27,11 @@ class MainActivity : AppCompatActivity(), PermissionDialog.PermissionDialogListe
         super.onCreate(savedInstanceState)
 
         BackendController.mPersonalDataServer = PersonalDataServer(applicationContext)
+        BackendController.mBlockchainEntryServer = BlockchainEntryServer(applicationContext)
 
         val data = intent.data
         val strData = data?.toString() ?: ""
-        val formId = strData.replace("com.vaishnavsm.opposmartfill://","")
+        val formId = strData.replace("opposmartfill://","")
 
         if(formId.length > 2) BackendController.mBackgroundData["form-id"] = formId
         else if(BackendController.mBackgroundData.contains("form-id")) BackendController.mBackgroundData.remove("form-id")

@@ -18,8 +18,10 @@ class DataServer {
         val reqq = Volley.newRequestQueue(context)
         val req = StringRequest(Request.Method.GET, "$URL?form-id=$formId", Response.Listener { response ->
             Log.d("DATA REC", response)
+            Log.d("DATA REC", response.length.toString())
+            Log.d("DATA REC", response.substring(response.indexOf('{'),response.lastIndexOf('}')+1).length.toString())
             val form = mutableMapOf<String, List<String>>()
-            val o = JSONObject(response)
+            val o = JSONObject(response.substring(1,response.length-1).replace("\\\"","\""))
             for(key in o.keys()){
                 val l = o.getJSONArray(key)
                 val list = mutableListOf<String>()

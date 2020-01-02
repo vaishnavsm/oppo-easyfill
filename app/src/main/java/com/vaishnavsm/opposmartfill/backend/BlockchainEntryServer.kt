@@ -4,14 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import java.lang.Exception
 
-class PersonalDataServer(context : Context) {
+class BlockchainEntryServer(context : Context) {
 
     private val dataMap = mutableMapOf<String, String>()
     private lateinit var input : SharedPreferences
     private lateinit var editor : SharedPreferences.Editor
     init {
         try{
-            input = context.getSharedPreferences("DATA", 0)
+            input = context.getSharedPreferences("BLOCK", 0)
         } catch (e : Exception) {
 
         }

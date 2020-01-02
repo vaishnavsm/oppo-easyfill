@@ -2,6 +2,7 @@ package com.vaishnavsm.opposmartfill.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,14 @@ import com.vaishnavsm.opposmartfill.PermissionDialog
 import com.vaishnavsm.opposmartfill.R
 import com.vaishnavsm.opposmartfill.backend.BackendController
 import com.vaishnavsm.opposmartfill.backend.DataServer
+import java.math.BigInteger
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.MessageDigest
+import java.security.PublicKey
+import java.security.spec.X509EncodedKeySpec
+import java.sql.Timestamp
+import kotlin.math.roundToInt
 
 class HomeFragment : Fragment(), PermissionDialog.PermissionDialogListener, DataServer.DataServerInterface {
 
@@ -67,6 +76,22 @@ class HomeFragment : Fragment(), PermissionDialog.PermissionDialogListener, Data
 
     override fun onDialogGrantClick(list: List<String>) {
         if(form.isNullOrEmpty()) throw Exception("Form Was Blank When Continue Was Called")
-        else processWithPermissions(form!!, list)
+        else {
+            val rseed = (Math.random()*100000).roundToInt()
+
+            val timestamp = Timestamp(System.currentTimeMillis())
+            val pk = KeyPairGenerator.getInstance("rsa").genKeyPair().public
+            val publicKey = pk.key()
+            BackendController.mBlockchainEntryServer.addData((list.toString()+rseed).hash(), "Granted Permissions $list For ${formIdText.text} with salt $rseed and timestamp $timestamp. Added to chain and received transaction public key of counterparty $publicKey")
+            BackendController.mBlockchainEntryServer.saveState()
+            processWithPermissions(form!!, list)
+        }
     }
 }
+
+private fun String.hash(): String {
+    val md = MessageDigest.getInstance("MD5")
+    return BigInteger(1, md.digest(toByteArray())).toString(16).padStart(32, '0')
+}
+
+fun PublicKey.key() = Base64.encodeToString(this.encoded, Base64.DEFAULT)!!
